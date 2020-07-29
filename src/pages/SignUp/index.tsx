@@ -17,6 +17,8 @@ import getValidationErrors from '../../utils/getValidationErrors';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
+import api from '../../services/api';
+
 import logoImg from '../../assets/logo.png';
 
 import {
@@ -53,9 +55,15 @@ const SignUp: React.FC = () => {
           abortEarly: false,
         });
 
-        // await api.post('/users', data);
+        const response = await api.post('/users', data);
+        console.log(response);
 
-        // history.push('/');
+        Alert.alert(
+          'Cadastro realizado com sucesso',
+          'Você já pode fazer login na aplicação',
+        );
+
+        navigation.goBack();
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
@@ -71,7 +79,7 @@ const SignUp: React.FC = () => {
         );
       }
     },
-    [],
+    [navigation],
   );
   return (
     <KeyboardAvoidingView
@@ -97,7 +105,7 @@ const SignUp: React.FC = () => {
               onSubmitEditing={() => emailInputRef.current?.focus()}
               name="name"
               icon="user"
-              placeholder="Nome-mail"
+              placeholder="Nome"
             />
             <Input
               ref={emailInputRef}

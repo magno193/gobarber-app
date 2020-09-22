@@ -31,7 +31,7 @@
   "rules": {
     "react/prop-types": "off",
     "react/jsx-props-no-spreading": "off",
-    "prettier/prettier": "off",
+    "prettier/prettier": "warn",
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -50,12 +50,14 @@
         ]
       }
     ],
-    "import/prefer-default-export": "off",
+    "import/prefer-default-export": "warn",
     "no-unused-expressions": "off",
     "@typescript-eslint/ban-types": "warn",
-    "object-curly-newline": "off",
+    "object-curly-newline": "warn",
     "camelcase": "warn",
-    "react/jsx-one-expression-per-line": "warn"
+    "react/jsx-one-expression-per-line": "warn",
+    "arrow-parens": "off",
+    "no-unused-vars": "warn"
   },
   "settings": {
     "import/resolver": {

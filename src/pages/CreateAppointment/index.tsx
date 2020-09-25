@@ -23,14 +23,19 @@ import {
   OpenDatePickerButtonText,
 } from './styles';
 
+interface RouteParams {
+  providerId: string;
+}
+
 export interface Provider {
   id: string;
   name: string;
   avatar_url: string;
 }
 
-interface RouteParams {
-  providerId: string;
+interface AvailabilityItem {
+  hour: number;
+  available: boolean;
 }
 
 const CreateAppointment: React.FC = () => {
@@ -39,6 +44,7 @@ const CreateAppointment: React.FC = () => {
   const { goBack } = useNavigation();
   const { providerId } = route.params as RouteParams;
 
+  const [availability, setAvailability] = useState<AvailabilityItem[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [providers, setProviders] = useState<Provider[]>([]);
@@ -49,6 +55,20 @@ const CreateAppointment: React.FC = () => {
       setProviders(response.data);
     });
   }, []);
+
+  useEffect(() => {
+    api
+      .get(`providers/${selectedProvider}/day-availability`, {
+        params: {
+          year: selectedDate.getFullYear(),
+          month: selectedDate.getMonth() + 1,
+          day: selectedDate.getDate(),
+        },
+      })
+      .then(response => {
+        setAvailability(response.data);
+      });
+  }, [selectedDate, selectedProvider]);
 
   const navigateBack = useCallback(() => {
     goBack();

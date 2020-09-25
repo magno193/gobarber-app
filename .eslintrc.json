@@ -57,7 +57,9 @@
     "camelcase": "warn",
     "react/jsx-one-expression-per-line": "warn",
     "arrow-parens": "off",
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "indent":"warn",
+    "implicit-arrow-linebreak": "off"
   },
   "settings": {
     "import/resolver": {

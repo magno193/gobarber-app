@@ -59,7 +59,8 @@
     "arrow-parens": "off",
     "no-unused-vars": "warn",
     "indent":"warn",
-    "implicit-arrow-linebreak": "off"
+    "implicit-arrow-linebreak": "off",
+    "import/no-duplicates": "off"
   },
   "settings": {
     "import/resolver": {

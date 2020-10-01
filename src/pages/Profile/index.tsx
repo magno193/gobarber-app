@@ -7,6 +7,7 @@ import {
   Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import ImagePicker from 'react-native-image-picker';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
@@ -86,10 +87,10 @@ const Profile: React.FC = () => {
           email,
           ...(data.old_password
             ? {
-                old_password,
-                password,
-                password_confirmation,
-              }
+              old_password,
+              password,
+              password_confirmation,
+            }
             : {}),
         };
         const response = await api.put('/profile', formData);
@@ -119,6 +120,38 @@ const Profile: React.FC = () => {
     [navigation],
   );
 
+  const handleUpdateAvatar = useCallback(() => {
+    ImagePicker.showImagePicker(
+      {
+        title: 'Selecione um avatar',
+        cancelButtonTitle: 'Cancelar',
+        takePhotoButtonTitle: 'Usar câmera',
+        chooseFromLibraryButtonTitle: 'Escolha da galeria',
+      },
+      response => {
+        if (response.didCancel) {
+          return;
+        }
+        if (response.error) {
+          Alert.alert('Erro ao atualizar seu avatar');
+          console.log(response);
+          return;
+        }
+
+        const data = new FormData();
+        data.append('avatar', {
+          type: 'image/jpeg',
+          name: `${user.id}.jpg`,
+          uri: response.uri,
+        });
+
+        api.patch('users/avatar', data).then(res => {
+          updateUser(res.data);
+        });
+      },
+    );
+  }, [updateUser, user.id]);
+
   const handleGoBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
@@ -136,7 +169,7 @@ const Profile: React.FC = () => {
           <BackButton onPress={handleGoBack}>
             <Icon name="chevron-left" size={24} color="#999591" />
           </BackButton>
-          <UserAvatarButton>
+          <UserAvatarButton onPress={handleUpdateAvatar}>
             <UserAvatar source={{ uri: user.avatar_url }} />
           </UserAvatarButton>
           <Title>Meu perfil</Title>
